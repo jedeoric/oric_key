@@ -19,12 +19,14 @@ set  directory[0]=4kkong
 set  targetdirectory[0]=4kkong
 set  execute[0]=make.bat
 set  binary[0]=release\4kkong.com
+set  readme[0]=readme.md
 
 set  repo[1]=https://github.com/jedeoric/Times-of-Lore.git
 set  directory[1]=Times-of-Lore
 set  targetdirectory[1]=tol
 set  execute[1]=make.bat
 set  binary[1]=release\*.com
+set  readme[1]=readme.md
 
 cd ..
 cd build
@@ -42,6 +44,7 @@ echo Execute !execute[%%n]!
 call !execute[%%n]!
 echo copy !binary[%%n]! to ..\..\release\apps\!targetdirectory[%%n]!\
 copy !binary[%%n]! ..\..\release\apps\!targetdirectory[%%n]!\
+copy !readme[%%n]! ..\..\release\apps\!targetdirectory[%%n]!\
 cd ..
 )
 

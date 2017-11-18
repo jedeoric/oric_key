@@ -1,18 +1,24 @@
-
 @echo off
 setlocal enabledelayedexpansion
+
+SET PATH=%PATH%;%CC65%
+
+SET TARGET_CPU=6502
 
 
 rmdir build /s /q
 rmdir release /s /q
 mkdir build
 mkdir release
-mkdir release\cardridge
-mkdir release\usbkey
-mkdir release\usbkey\bin
-mkdir release\usbkey\usr
-mkdir release\usbkey\usr\bin
-mkdir release\usbkey\usr\share
+mkdir release\%TARGET_CPU%\
+mkdir release\%TARGET_CPU%\cardridge
+mkdir release\%TARGET_CPU%\roms
+mkdir release\%TARGET_CPU%\usbkey
+mkdir release\%TARGET_CPU%\usbkey\bin
+mkdir release\%TARGET_CPU%\usbkey\usr
+mkdir release\%TARGET_CPU%\usbkey\usr\bin
+mkdir release\%TARGET_CPU%\usbkey\usr\share
+rem mkdir release\%TARGET_CPU%\usbkey\usr\share
 
 
 
@@ -44,48 +50,67 @@ set	 typebinary[2]=
 
 set  repo[3]=https://github.com/jedeoric/touch.git
 set  directory[3]=touch
-set  targetdirectory[3]=..\..\release\usbkey\bin
+set  targetdirectory[3]=..\..\release\%TARGET_CPU%\usbkey\bin
 set  execute[3]=make.bat NORUN
 set  binary[3]=release\touch
 set  readme[3]=
 
 set  repo[4]=https://github.com/jedeoric/4kkong.git
 set  directory[4]=4kkong
-set  targetdirectory[4]=..\..\release\usbkey\usr\bin
+set  targetdirectory[4]=..\..\release\%TARGET_CPU%\usbkey\usr\bin
 set  execute[4]=make.bat NORUN
 set  binary[4]=release\4kkong
 set  readme[4]=readme.md
 
 set  repo[5]=https://github.com/jedeoric/file.git
 set  directory[5]=file
-set  targetdirectory[5]=..\..\release\usbkey\bin
+set  targetdirectory[5]=..\..\release\%TARGET_CPU%\usbkey\bin
 set  execute[5]=make.bat NORUN
 set  binary[5]=release\file
 set  readme[5]=
 
-set  repo[6]=https://github.com/jedeoric/Times-of-Lore.git
-set  directory[6]=Times-of-Lore
-set  targetdirectory[6]=..\..\release\usbkey\usr\bin
-set  execute[6]=make.bat
-set  binary[6]=release\tolsb
-set  readme[6]=readme.md
-set	 typebinary[6]=apps
 
+set  repo[6]=https://github.com/jedeoric/ch376-tool.git
+set  directory[6]=ch376-tool
+set  targetdirectory[6]=..\..\release\%TARGET_CPU%\usbkey\usr\bin
+set  execute[6]=make.bat NORUN
+set  binary[6]=release\ch376
+set  readme[6]=
 
-set  repo[7]=https://github.com/jedeoric/stormlord.git
-set  directory[7]=stormlord
-set  targetdirectory[7]=..\..\release\usbkey\usr\bin
-set  execute[7]=Buildstormlord.bat
-set  binary[7]=release\stormld
-set  readme[7]=readme.md
+set  repo[7]=https://github.com/jedeoric/viewhrs.git
+set  directory[7]=viewhrs
+set  targetdirectory[7]=..\..\release\%TARGET_CPU%\usbkey\usr\bin
+set  execute[7]=make.bat NORUN
+set  binary[7]=
+set  readme[7]=
+set  usrshare[7]=release\usr\share\viewhrs\
 
-
-set  repo[8]=https://github.com/jedeoric/ch376-tool.git
-set  directory[8]=ch376-tool
-set  targetdirectory[8]=..\..\release\usbkey\usr\bin
+set  repo[8]=https://github.com/jedeoric/man.git
+set  directory[8]=man
+set  targetdirectory[8]=..\..\release\%TARGET_CPU%\usbkey\usr\bin
 set  execute[8]=make.bat NORUN
-set  binary[8]=release\ch376
-set  readme[8]=readme.md
+set  binary[8]=
+set  readme[8]=
+set  usrshare[8]=release\usr\share\man\
+
+
+
+rem set  repo[6]=https://github.com/jedeoric/Times-of-Lore.git
+rem set  directory[6]=Times-of-Lore
+rem set  targetdirectory[6]=..\..\release\%TARGET_CPU%\usbkey\usr\bin
+rem set  execute[6]=make.bat
+rem set  binary[6]=release\tolsb
+rem set  readme[6]=readme.md
+rem set	 typebinary[6]=apps
+
+
+rem set  repo[7]=https://github.com/jedeoric/stormlord.git
+rem set  directory[7]=stormlord
+rem set  targetdirectory[7]=..\..\release\%TARGET_CPU%\usbkey\usr\bin
+rem set  execute[7]=Buildstormlord.bat
+rem set  binary[7]=release\stormld
+rem set  readme[7]=readme.md
+
 
 
 cd build
@@ -100,16 +125,16 @@ cd !directory[%%n]!
 call !execute[%%n]!
 cd ..
 )
-
+rem goto end:
 
 for /l %%n in (3,1,8) do (
-
+echo Copying release !directory[%%n]!
 cd !directory[%%n]!
-echo !binary[%%n]! !targetdirectory[%%n]!
-copy !binary[%%n]! !targetdirectory[%%n]!
+cd release
+xcopy * ..\..\..\release\%TARGET_CPU%\usbkey\   /E /Q /Y
+cd ..
 cd ..
 )
-
 
 
 cd ..\
